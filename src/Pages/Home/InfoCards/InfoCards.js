@@ -1,7 +1,7 @@
 import React from 'react';
-import clock from '../../assests/icons/clock.svg'
-import phone from '../../assests/icons/phone.svg'
-import marker from '../../assests/icons/marker.svg'
+import clock from '../../../assests/icons/clock.svg'
+import phone from '../../../assests/icons/phone.svg'
+import marker from '../../../assests/icons/marker.svg'
 import InfoCard from './InfoCard';
 const InfoCards = () => {
     const cardData = [
