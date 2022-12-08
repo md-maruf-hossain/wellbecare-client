@@ -12,7 +12,7 @@ const NavigationBar = () => {
     </React.Fragment>
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 flex justify-between">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -25,7 +25,7 @@ const NavigationBar = () => {
             {navItems}
           </ul>
         </div>
-        <Link to='/' className="normal-case text-2xl font-semibold text-emerald-500">WellBe Care</Link>
+        <Link to='/' className="normal-case text-2xl font-semibold text-primary">WellBe Care</Link>
       </div>
       {/* nav items */}
       <div className="navbar-center hidden lg:flex">
