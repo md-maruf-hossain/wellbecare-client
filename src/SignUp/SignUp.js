@@ -1,32 +1,37 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthProvider";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthProvider";
 
-const Login = () => {
-  const {register,formState: { errors }, handleSubmit} = useForm();
-  const {signIn} = useContext(AuthContext);
-  const [loginError, setLoginError] = useState('');
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const from = location.state?.from?.pathname || '/';
-
+const SignUp = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  const { createUser, updateCurrentUser } = useContext(AuthContext);
+  const [signupError, setSignupError] = useState('')
   const handleLogin = (data) => {
     console.log(data);
-    setLoginError('')
-    signIn(data.email, data.password)
-    .then(result =>{
-      const user= result.user;
-      console.log(user);
-      toast.success('Login successful');
-      navigate(from, {replace: true});
-    })
-    .catch(error => {
-      console.error(error.message);
-      setLoginError(error.message);
-    })
+    setSignupError('');
+    createUser(data.email, data.password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        toast.success('Signup successful');
+
+        const userInfo = {
+          displayName: data.name,
+        }
+        updateCurrentUser(userInfo)
+        .then(()=> {})
+        .catch(err=> console.error(err))
+      })
+      .catch((err) => {
+        console.error(err);
+        setSignupError(err.message);
+      });
   };
   return (
     <form className="py-6" onSubmit={handleSubmit(handleLogin)}>
@@ -36,19 +41,35 @@ const Login = () => {
             <div className="relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white py-16 px-10 text-center sm:px-12 md:px-[60px]">
               <div className="mb-10 text-center md:mb-16">
                 <Link className="mx-auto inline-block">
-                  <p className="text-primary text-4xl font-bold">Login</p>
+                  <p className="text-primary text-4xl font-bold">Register</p>
                 </Link>
               </div>
 
               <div className="mb-6">
                 <input
-                  {...register("email", { required: "Email Address is required" })}
+                  {...register("name", {
+                    required: "Name is required",
+                    maxLength: { value: 20, message: "Your name should be in 20 characters" },
+                  })}
+                  type="text"
+                  placeholder="Name"
+                  className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-colorplaceholder-[#ACB6BE] outline-none focus:border-primary focus-visible:shadow-none"
+                />
+                {errors.name && <p className="text-red-500 pt-2 text-left">{errors.name?.message}</p>}
+              </div>
+              <Toaster />
+              <div className="mb-6">
+                <input
+                  {...register("email", {
+                    required: "Email Address is required",
+                  })}
                   type="text"
                   placeholder="Email"
-                  className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-primary focus-visible:shadow-none"
+                  className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-colorplaceholder-[#ACB6BE] outline-none focus:border-primary focus-visible:shadow-none"
                 />
                 {errors.email && <p className="text-red-500 pt-2 text-left">{errors.email?.message}</p>}
               </div>
+
               <div className="mb-6">
                 <input
                   {...register("password", {
@@ -57,12 +78,11 @@ const Login = () => {
                   })}
                   type="password"
                   placeholder="Password"
-                  className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-primary focus-visible:shadow-none"
+                  className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-colorplaceholder-[#ACB6BE] outline-none focus:border-primary focus-visible:shadow-none"
                 />
                 {errors.password && <p className="text-red-500 pt-2 text-left">{errors.password?.message}</p>}
-                {loginError && <p className="text-red-500 pt-2 text-left">{loginError}</p>}
+                {signupError && <p className="text-red-500 pt-2 text-left">{signupError}</p>}
               </div>
-              <Toaster />
               <div className="mb-10">
                 <input
                   type="submit"
@@ -70,37 +90,10 @@ const Login = () => {
                   className="bordder-primary btn btn-primary w-full cursor-pointer rounded-md border bg-primary py-3 px-5 text-base text-white transition hover:bg-opacity-90"
                 />
               </div>
-
-              <p className="mb-6 text-base">Connect With</p>
-
-              <ul className="-mx-2 mb-12 flex justify-between">
-                <li className="w-full px-2">
-                  <Link className="flex h-11 items-center justify-center rounded-md bg-[#4064AC] hover:bg-opacity-90">
-                    <svg width="10" height="20" viewBox="0 0 10 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M9.29878 8H7.74898H7.19548V7.35484V5.35484V4.70968H7.74898H8.91133C9.21575 4.70968 9.46483 4.45161 9.46483 4.06452V0.645161C9.46483 0.290323 9.24343 0 8.91133 0H6.89106C4.70474 0 3.18262 1.80645 3.18262 4.48387V7.29032V7.93548H2.62912H0.747223C0.359774 7.93548 0 8.29032 0 8.80645V11.129C0 11.5806 0.304424 12 0.747223 12H2.57377H3.12727V12.6452V19.129C3.12727 19.5806 3.43169 20 3.87449 20H6.47593C6.64198 20 6.78036 19.9032 6.89106 19.7742C7.00176 19.6452 7.08478 19.4194 7.08478 19.2258V12.6774V12.0323H7.66596H8.91133C9.2711 12.0323 9.54785 11.7742 9.6032 11.3871V11.3548V11.3226L9.99065 9.09677C10.0183 8.87097 9.99065 8.6129 9.8246 8.35484C9.76925 8.19355 9.52018 8.03226 9.29878 8Z"
-                        fill="white"
-                      />
-                    </svg>
-                  </Link>
-                </li>
-
-                <li className="w-full px-2">
-                  <Link className="flex h-11 items-center justify-center rounded-md bg-[#D64937] hover:bg-opacity-90">
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M17.8477 8.17132H9.29628V10.643H15.4342C15.1065 14.0743 12.2461 15.5574 9.47506 15.5574C5.95916 15.5574 2.8306 12.8821 2.8306 9.01461C2.8306 5.29251 5.81018 2.47185 9.47506 2.47185C12.2759 2.47185 13.9742 4.24567 13.9742 4.24567L15.7024 2.47185C15.7024 2.47185 13.3783 0.000145544 9.35587 0.000145544C4.05223 -0.0289334 0 4.30383 0 8.98553C0 13.5218 3.81386 18 9.44526 18C14.4212 18 17.9967 14.7141 17.9967 9.79974C18.0264 8.78198 17.8477 8.17132 17.8477 8.17132Z"
-                        fill="white"
-                      />
-                    </svg>
-                  </Link>
-                </li>
-              </ul>
-              <Link className="mb-2 inline-block text-base text-[#adadad] hover:text-primary hover:underline">Forget Password?</Link>
               <p className="text-base text-[#adadad]">
-                Not a member yet?
-                <Link to="/register" className="text-primary hover:underline">
-                  Sign Up
+                Already have an account?
+                <Link to="/login" className="text-primary hover:underline">
+                  Login
                 </Link>
               </p>
               <div>
@@ -149,4 +142,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

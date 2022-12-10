@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
+import { toast, Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthProvider";
 
 const NavigationBar = () => {
+  const {user, logOut} = useContext(AuthContext);
+  const handleLogOut = ()=>{
+    logOut()
+    .then(()=>{
+      toast.success('Successfully Logged Out');
+    })
+    .catch(err=> console.log(err))
+  }
     // navbar items
     const navItems = <React.Fragment>
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/appointment'>Appointment</Link></li>
-        <li><Link to='/review'>Reviews</Link></li>
         <li><Link to='/about'>About</Link></li>
-        <li><Link to='/login'>Login</Link></li>
+        {user?.uid ? 
+          <>
+            <li><Link to='/dashboard'>Dashboard</Link></li>
+            <li><Link onClick={handleLogOut}>Sign out</Link></li>
+          </>
+            : 
+          <li><Link to='/login'>Login</Link></li>}
     </React.Fragment>
 
   return (
@@ -32,6 +47,7 @@ const NavigationBar = () => {
         <ul className="menu menu-horizontal p-0 font-medium text-lg">
           {navItems}
         </ul>
+        <Toaster />
       </div>
     </div>
   );
