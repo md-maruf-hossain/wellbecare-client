@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, formState: { errors },  handleSubmit } = useForm();
     const handleLogin = data=>{
         console.log(data);
     }
@@ -22,19 +22,24 @@ const Login = () => {
                 
                   <div className="mb-6">
                     <input
-                      {...register("email")}
+                      {...register("email", {required: "Email Address is required" })}
                       type="text"
                       placeholder="Email"
                       className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-primary focus-visible:shadow-none"
                     />
+                    {errors.email && <p className="text-red-500 pt-2 text-left">{errors.email?.message}</p>}
                   </div>
                   <div className="mb-6">
                     <input
-                      {...register("password")}
+                      {...register("password", {
+                        required: "Password is required",
+                        minLength:{value: 6, message: "Your password should be at least 6 characters"} 
+                        })}
                       type="password"
                       placeholder="Password"
                       class="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:border-primary focus-visible:shadow-none"
                     />
+                    {errors.password && <p className="text-red-500 pt-2 text-left">{errors.password?.message}</p>}
                   </div>
                   <div class="mb-10">
                     <input type="submit" value="Login" class="bordder-primary btn btn-primary w-full cursor-pointer rounded-md border bg-primary py-3 px-5 text-base text-white transition hover:bg-opacity-90" />
