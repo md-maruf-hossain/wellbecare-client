@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import Error404 from "../../Error404/Error404";
 import Main from "../../Layout/Main";
 import Appointment from "../../Pages/Appointments/Appointment/Appointment";
 import DashBoard from "../../Pages/DashBoard/DashBoard";
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
             {
                 path: '/register',
                 element: <SignUp/>
+            },
+            {
+                path:'*',
+                element: <Error404/>
             }
         ]
     },
