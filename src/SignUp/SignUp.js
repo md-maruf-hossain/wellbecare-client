@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast, Toaster } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthProvider";
 
 const SignUp = () => {
@@ -11,22 +11,25 @@ const SignUp = () => {
     handleSubmit,
   } = useForm();
   const { createUser, updateCurrentUser } = useContext(AuthContext);
-  const [signupError, setSignupError] = useState('')
+  const [signupError, setSignupError] = useState("");
+  const navigate = useNavigate();
+
   const handleLogin = (data) => {
-    console.log(data);
-    setSignupError('');
+    setSignupError("");
     createUser(data.email, data.password)
       .then((result) => {
         const user = result.user;
         console.log(user);
-        toast.success('Signup successful');
+        toast.success("Signup successful");
 
         const userInfo = {
-          displayName: data.name,
-        }
+          displayName: data?.name,
+        };
         updateCurrentUser(userInfo)
-        .then(()=> {})
-        .catch(err=> console.error(err))
+          .then(() => {
+            navigate('/');
+          })
+          .catch((err) => console.error(err));
       })
       .catch((err) => {
         console.error(err);
@@ -49,7 +52,7 @@ const SignUp = () => {
                 <input
                   {...register("name", {
                     required: "Name is required",
-                    maxLength: { value: 20, message: "Your name should be in 20 characters" },
+                    maxLength: { value: 30, message: "Your name should be in 20 characters" },
                   })}
                   type="text"
                   placeholder="Name"

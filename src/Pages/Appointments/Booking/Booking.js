@@ -1,9 +1,12 @@
 import { format } from "date-fns";
-import React from "react";
+import React, { useContext } from "react";
+import { toast, Toaster } from "react-hot-toast";
+import { AuthContext } from "../../../contexts/AuthProvider";
 
-const Booking = ({treatment, selectedDate, setTreatment}) => {
+const Booking = ({treatment, selectedDate, setTreatment, refetch}) => {
     const {name, slots} = treatment;
     const date = format(selectedDate, 'PPP');
+    const {user} = useContext(AuthContext);
 
     const handleBooking = event => {
         event.preventDefault();
@@ -14,15 +17,32 @@ const Booking = ({treatment, selectedDate, setTreatment}) => {
         const phone = form.phone.value;
         const booking = {
             appointmentDate: date,
-            treatment: name,
+            treatment: treatment.name,
             patientName: name,
             slot,
             email,
             phone,
 
         }
-        console.log(booking);
-        setTreatment(null)
+        fetch("http://localhost:5000/bookings", {
+          method: "POST",
+          headers: {
+            "content-type" : "application/json",
+          },
+          body: JSON.stringify(booking),
+        })
+        .then(res=> res.json())
+        .then(data=> {
+          console.log(data);
+          if(data.acknowledged){
+            setTreatment(null);
+            toast.success("Booking Confirmed");
+            refetch();
+          }
+          else{
+            toast.error(data.message);
+          }
+        })
     }
   return (
     <>
@@ -41,8 +61,9 @@ const Booking = ({treatment, selectedDate, setTreatment}) => {
                     slots.map((slot, index)=><option key={index} value={slot}>{slot}</option>)
                 }
             </select>
-            <input name="name" type="text" placeholder="Your Name" className="input input-bordered w-full" required/>
-            <input name="email" type="email" placeholder="Email Address" className="input input-bordered w-full" required/>
+            <Toaster/>
+            <input name="name" defaultValue={user?.displayName} disabled type="text" placeholder="Your Name" className="input input-bordered w-full" required/>
+            <input name="email" defaultValue={user?.email} disabled type="email" placeholder="Email Address" className="input input-bordered w-full" required/>
             <input name="phone" type="text" placeholder="Phone Number" className="input input-bordered w-full" required/>
             <input type="submit" value="submit" className="btn btn-success input-bordered w-full" />
           </form>
