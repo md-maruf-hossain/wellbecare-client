@@ -3,6 +3,7 @@ import Error404 from "../../Error404/Error404";
 import DashboardLayout from "../../Layout/DashboardLayout";
 import Main from "../../Layout/Main";
 import Appointment from "../../Pages/Appointments/Appointment/Appointment";
+import AddDoctor from "../../Pages/DashBoard/AddDoctor/AddDoctor";
 import AllUsers from "../../Pages/DashBoard/AllUsers/AllUsers";
 import MyAppointments from "../../Pages/DashBoard/MyAppointments/MyAppointments";
 import Home from "../../Pages/Home/Home/Home";
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AllUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/dashboard/adddoctor",
+        element: (
+          <AdminRoute>
+            <AddDoctor />
           </AdminRoute>
         ),
       },

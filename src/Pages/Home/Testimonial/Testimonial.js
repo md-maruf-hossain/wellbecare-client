@@ -1,8 +1,8 @@
 import React from "react";
 import quote from "../../../assests/icons/quote.svg";
-import people1 from '../../../assests/images/people1.png'
-import people2 from '../../../assests/images/people2.png'
-import people3 from '../../../assests/images/people3.png'
+import people1 from "../../../assests/images/people1.png";
+import people2 from "../../../assests/images/people2.png";
+import people3 from "../../../assests/images/people3.png";
 import Reviews from "./Reviews";
 
 const Testimonial = () => {
@@ -10,24 +10,27 @@ const Testimonial = () => {
     {
       id: 1,
       name: "Maruf Hossain",
-      review: "It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content",
+      review:
+        "It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content",
       location: "Dhaka",
-      image:people1
+      image: people1,
     },
     {
       id: 2,
       name: "Alex Morgan",
-      review: "It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content",
+      review:
+        "It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content",
       location: "USA",
-      image:people2
+      image: people2,
     },
     {
       id: 1,
       name: "Dua Lipa",
-      review: "It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content",
+      review:
+        "It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content",
       location: "Brazil",
-      image:people3
-    }
+      image: people3,
+    },
   ];
 
   return (
@@ -42,12 +45,9 @@ const Testimonial = () => {
         </figure>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 mt-6">
-        {
-            reviews.map(r => <Reviews
-                key={r.id}
-                r={r}
-            />)
-        }
+        {reviews.map((r) => (
+          <Reviews key={r.id} r={r} />
+        ))}
       </div>
     </section>
   );
