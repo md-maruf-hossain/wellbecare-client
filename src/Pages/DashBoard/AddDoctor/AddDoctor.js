@@ -25,7 +25,7 @@ const AddDoctor = () => {
     const image = data.image[0];
     const formData = new FormData();
     formData.append("image", image);
-    const imageURL = `https://api.imgbb.com/1/upload?expiration=600&key=${imageHostingKey}`;
+    const imageURL = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
     fetch(imageURL, {
       method: "POST",
       body: formData,
