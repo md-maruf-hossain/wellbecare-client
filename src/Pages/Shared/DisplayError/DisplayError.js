@@ -1,19 +1,19 @@
 import React, { useContext } from "react";
-import { toast, Toaster } from "react-hot-toast";
-import { useRouteError } from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider";
 
 const DisplayError = () => {
   const { logOut } = useContext(AuthContext);
+  const error = useRouteError();
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
     logOut()
       .then(() => {
-        toast.success("Successfully Logged Out");
+        navigate("/login");
       })
       .catch((err) => console.log(err));
   };
-  const error = useRouteError();
   return (
     <div>
       <p className="text-red-500">Something went wrong</p>
@@ -22,7 +22,6 @@ const DisplayError = () => {
         Please{" "}
         <button className="btn btn-primary" onClick={handleLogOut}></button>
       </h4>
-      <Toaster />
     </div>
   );
 };
