@@ -13,7 +13,7 @@ const CheckoutForm = ({ booking }) => {
   const { price, email, patientName, _id } = booking;
 
   useEffect(() => {
-    fetch("http://localhost:5000/create-payment-intent", {
+    fetch("https://wellbecare-server.vercel.app/create-payment-intent", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const CheckoutForm = ({ booking }) => {
         bookingId: _id,
       };
 
-      fetch("http://localhost:5000/payments", {
+      fetch("https://wellbecare-server.vercel.app/payments", {
         method: "POST",
         headers: {
           "content-type": "application/json",

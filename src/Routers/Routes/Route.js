@@ -88,7 +88,7 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/bookings/${params.id}`),
+          fetch(`https://wellbecare-server.vercel.app/bookings/${params.id}`),
       },
     ],
   },
