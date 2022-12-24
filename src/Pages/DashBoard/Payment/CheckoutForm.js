@@ -10,7 +10,7 @@ const CheckoutForm = ({ booking }) => {
 
   const stripe = useStripe();
   const elements = useElements();
-  const { price, email, patientName } = booking;
+  const { price, email, patientName, _id } = booking;
 
   useEffect(() => {
     fetch("http://localhost:5000/create-payment-intent", {
@@ -63,8 +63,29 @@ const CheckoutForm = ({ booking }) => {
       return;
     }
     if (paymentIntent.status === "succeeded") {
-      setSuccess("Congratulations! Your payment is completed");
-      setTransactionId(paymentIntent.id);
+      const payment = {
+        price,
+        transactionId: paymentIntent.id,
+        email,
+        bookingId: _id,
+      };
+
+      fetch("http://localhost:5000/payments", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify(payment),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.insertedId) {
+            setSuccess("Congratulations! Your payment is completed");
+            setTransactionId(paymentIntent.id);
+          }
+        });
     }
     setProcessing(false);
   };
