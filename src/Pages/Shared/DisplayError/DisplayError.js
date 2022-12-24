@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useNavigate, useRouteError } from "react-router-dom";
+import { Link, useNavigate, useRouteError } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider";
 
 const DisplayError = () => {
@@ -18,9 +18,15 @@ const DisplayError = () => {
     <div>
       <p className="text-red-500">Something went wrong</p>
       <p className="text-red-400">{error.statusText || error.message}</p>
-      <h4>
+      <h4 className="text-3xl font-semibold">
         Please{" "}
-        <button className="btn btn-primary" onClick={handleLogOut}></button>
+        <Link className="underline" onClick={handleLogOut}>
+          Log out
+        </Link>{" "}
+        or{" "}
+        <Link className="underline" to="/">
+          Go back home
+        </Link>
       </h4>
     </div>
   );
